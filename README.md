@@ -15,10 +15,10 @@ The recommended way to leverage these in your actions is to set them as environm
 env:
   DEFAULT_ACCOUNT_ID: ${{ secrets.HUBSPOT_ACCOUNT_ID }}
   DEFAULT_PERSONAL_ACCESS_KEY: ${{ secrets.HUBSPOT_PERSONAL_ACCESS_KEY }}
-  DEFAULT_CLI_VERSION: "latest" # Optional: specify a CLI version (it will default to latest if unset)
+  DEFAULT_CLI_VERSION: "7.9.0" # Optional: specify a CLI version (it will default to a stable version).
 ```
 
-**TIP:** The `DEFAULT_CLI_VERSION` will default to latest, but we recommend targeting a specific cli version to prevent new releases from impacting your CI/CD flow.
+**TIP:** The `DEFAULT_CLI_VERSION` will default to a specific stable version.  If the `DEFAULT_CLI_VERSION` is used, we recommend targeting a specific cli version instead of using dist-tags like "latest" or "next" to prevent new releases from impacting your CI/CD flow.
 
 Now, set up a new workflow file that automatically uploads new changes on your `main` branch to your HubSpot account.
 
@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: HubSpot Project Action
-        uses: HubSpot/hubspot-project-actions@v1.0.0
+        uses: HubSpot/hubspot-project-actions@v1.0.1
 ```
 
 3. Commit and merge your changes
@@ -67,14 +67,16 @@ HubSpot/hubspot-project-actions/[action-name]@v[version]
 
 For example:
 
-- `HubSpot/hubspot-project-actions@v1.0.0`
-- `HubSpot/hubspot-project-actions/project-upload@v1.0.0`
+- `HubSpot/hubspot-project-actions@v1.0.1`
+- `HubSpot/hubspot-project-actions/project-upload@v1.0.1`
 - `HubSpot/hubspot-project-actions/project-deploy@v1.2.3`
 - `HubSpot/hubspot-project-actions/project-validate@v2.0.0`
 
 ## Available Actions
 
-All actions support the `DEFAULT_ACCOUNT_ID` and `DEFAULT_PERSONAL_ACCESS_KEY`, and `DEFAULT_CLI_VERSION` env variables. There's no need to pass them into each action individually as inputs.
+All actions support the `DEFAULT_ACCOUNT_ID`, `DEFAULT_PERSONAL_ACCESS_KEY`, `DEFAULT_CLI_VERSION`, and `DEFAULT_DEBUG` env variables. There's no need to pass them into each action individually as inputs.
+
+**TIP:** Set `DEFAULT_DEBUG: true` or pass `debug: true` to any action to enable verbose CLI output. This is useful for troubleshooting failures.
 
 ### `Project Upload`
 
@@ -85,7 +87,7 @@ See the [project-upload docs](./project-upload/README.md) for detailed specs.
 **Example usage:**
 
 ```yaml
-- uses: HubSpot/hubspot-project-actions/project-upload@v1.0.0
+- uses: HubSpot/hubspot-project-actions/project-upload@v1.0.1
   with:
     project_dir: "./my-project" # optional
 ```
@@ -99,7 +101,7 @@ See the [project-deploy docs](./project-deploy/README.md) for detailed specs.
 **Example usage:**
 
 ```yaml
-- uses: HubSpot/hubspot-project-actions/project-deploy@v1.0.0
+- uses: HubSpot/hubspot-project-actions/project-deploy@v1.0.1
   with:
     build_id: ${{ steps.upload-action-step.outputs.build_id }}
     project_dir: "./my-project" # optional
@@ -114,7 +116,7 @@ See the [project-validate docs](./project-validate/README.md) for detailed specs
 **Example usage:**
 
 ```yaml
-- uses: HubSpot/hubspot-project-actions/project-validate@v1.0.0
+- uses: HubSpot/hubspot-project-actions/project-validate@v1.0.1
   with:
     project_dir: "./my-project" # optional
 ```
@@ -128,7 +130,7 @@ See the [install-hubspot-cli docs](./install-hubspot-cli/README.md) for detailed
 **Example usage:**
 
 ```yaml
-- uses: HubSpot/hubspot-project-actions/install-hubspot-cli@v1.0.0
+- uses: HubSpot/hubspot-project-actions/install-hubspot-cli@v1.0.1
   with:
-    cli_version: "7.0.0"
+    cli_version: "7.9.0"
 ```
